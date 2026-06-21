@@ -1,8 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar/Sidebar'
+import socket from '../socket/socket'
 
 const Layout = () => {
+  useEffect(() => {
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    return () => {
+      if (socket.connected) {
+        socket.disconnect();
+      }
+    };
+  }, []);
+
   return (
     <div className="h-screen flex flex-col">
 
