@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AppContext } from "./AppContext";
+import MatchMakingLoader from "../components/Loading";
+import NormalLoader from "../components/ui/NormalLoader";
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn, loading } = useContext(AppContext);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <NormalLoader/>;
   }
 
   return isLoggedIn

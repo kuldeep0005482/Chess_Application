@@ -1,8 +1,106 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
 
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+html,
+body,
+#root {
+  height: 100%;
+}
 
-*{
-  font-family: "Outfit", sans-serif;
+body {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  background:
+    radial-gradient(ellipse 900px 600px at 15% 0%, rgba(139, 92, 246, 0.16), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 30%, rgba(59, 130, 246, 0.13), transparent 60%),
+    #061229;
+  color: #e9edf7;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 18px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  .glass-inset {
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+  }
+  .notation-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: #5b6483;
+    letter-spacing: 0.02em;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .logo-accent {
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-title-accent {
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6 70%, #d4af6a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .input-field {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: #e9edf7;
+    font-family: "Manrope", sans-serif;
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+  .input-field:focus {
+    border-color: rgba(139, 92, 246, 0.55);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .input-field::placeholder {
+    color: #5b6483;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    color: white;
+    font-weight: 700;
+    border-radius: 13px;
+    box-shadow: 0 8px 24px -8px rgba(124, 92, 255, 0.55);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px -6px rgba(124, 92, 255, 0.7);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
 }

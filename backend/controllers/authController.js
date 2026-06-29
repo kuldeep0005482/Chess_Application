@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import userModel from "../models/userModel.js";
 import transporter from "../config/nodeMailer.js";
 import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from '../config/emailTemplates.js';
+import chessProfileModel from '../models/chessProfileModel.js';
 
 
 
@@ -23,14 +24,14 @@ export const register= async (req,res)=>{
         }
 
         // Send welcome email first so failed SMTP auth does not create a user record.
-        const mailOptions={
-            from: process.env.SENDER_EMAIL,
-            to: email,
-            subject:'Welcome to Our Application',
-            text:`welcome to our application! We are glad to have you on board. Your account has been successfully created with ${email}.`
+        // const mailOptions={
+        //     from: process.env.SENDER_EMAIL,
+        //     to: email,
+        //     subject:'Welcome to Our Application',
+        //     text:`welcome to our application! We are glad to have you on board. Your account has been successfully created with ${email}.`
 
-        };
-        await transporter.sendMail(mailOptions);
+        // };
+        // await transporter.sendMail(mailOptions);
 
         const hashedPassword= await bcrypt.hash(password,10);  
         const user= new userModel({
@@ -39,6 +40,11 @@ export const register= async (req,res)=>{
             password:hashedPassword
         });
         await user.save();
+        const profile = new chessProfileModel({
+            userId: user._id,
+            rating: 1200
+        })
+        await profile.save();
 
         const token= jwt.sign({id:user._id}, process.env.JWT_SECRET,{
             expiresIn:'7d'

@@ -1,39 +1,32 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import EmailVerify from './pages/EmailVerify';
-import ResetPassword from './pages/ResetPassword';
-import GameLayout from './pages/GameLayout/GameLayout';
-import Layout from './Layout/Layout';
-import ProtectedRoute from './context/protectedRoute';
-import { ToastContainer } from 'react-toastify';
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import Play from "./pages/Play.jsx";
+import Lobby from "./pages/Lobby.jsx";
+import Tournaments from "./pages/Tournaments.jsx";
+import Players from "./pages/Players.jsx";
+import Stats from "./pages/Stats.jsx";
+import Settings from "./pages/Settings.jsx";
+import Support from "./pages/Support.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import ProtectedRoute from "./context/protectedRoute.jsx";
 
-const App = () => {
+
+export default function App() {
   return (
-    <div>
-      <ToastContainer />
-
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-
-          <Route
-            path="game"
-            element={
-              <ProtectedRoute>
-                <GameLayout />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-
-        <Route path="/login" element={<Login />} />
-        <Route path="/email-verify" element={<EmailVerify />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/play" element={<ProtectedRoute><Play/></ProtectedRoute>} />
+      <Route path="/lobby" element={<ProtectedRoute><Lobby/></ProtectedRoute>} />
+      <Route path="/tournaments" element={<ProtectedRoute><Tournaments/></ProtectedRoute>} />
+      <Route path="/players" element={<ProtectedRoute><Players/></ProtectedRoute>} />
+      <Route path="/stats" element={<ProtectedRoute><Stats/></ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute><Settings/></ProtectedRoute>} />
+      <Route path="/support" element={<ProtectedRoute><Support/></ProtectedRoute>} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
-};
-
-export default App;
+}

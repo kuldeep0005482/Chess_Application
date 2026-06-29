@@ -1,44 +1,55 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Crown, Mail, Lock, ArrowRight } from "lucide-react";
+import { Crown, Mail, Lock, User, ArrowRight } from "lucide-react";
 import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
-import axios from "axios";
 import axiosInstance from "../api/axios.js";
-import { AppContext } from "../context/AppContext.jsx";
 import { useContext } from "react";
+import { AppContext } from "../context/AppContext.jsx";
 
-export default function Login() {
-
+export default function Signup() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
   const [error, setError] = useState("");
   const {setIsLoggedIn, getUserData} = useContext(AppContext);
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const onSubmit = async(e) => {
+  const onSubmit = async (e) => {
     try {
       e.preventDefault();
-      if (!form.email || !form.password) {
-        setError("Enter your email and password to continue.");
+      if (!form.name || !form.email || !form.password) {
+        setError("Fill in every field to create your account.");
         return;
       }
-      setError("");
-      // Hook up to a real auth API here.
-      const { data } = await axiosInstance.post('/api/auth/login', { email : form.email, password: form.password });
+      if (form.password !== form.confirm) {
+        setError("Passwords don't match.");
+        return;
+      }
+      const { data } = await axiosInstance.post(
+        "/api/auth/register",
+        {
+          name: form.name,
+          email: form.email,
+          password: form.password,
+        }
+      );
+
       if (data.success) {
         setIsLoggedIn(true);
         getUserData()
         navigate('/');
       }
-      else {
+      
         setError(data.message);
-        console.log(data.message);
-      }
+      
+      // Hook up to a real auth API here.
     } catch (error) {
-      console.log(error);
+       setError(
+    error.response?.data?.message || "Something went wrong"
+  );
+      
     }
   };
 
@@ -48,7 +59,7 @@ export default function Login() {
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="glass w-full max-w-[400px] p-7"
+        className="glass w-full max-w-[420px] p-7"
       >
         <div className="flex flex-col items-center gap-3 mb-7">
           <div className="w-11 h-11 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-purple to-blue">
@@ -58,12 +69,21 @@ export default function Login() {
             CHESS<span className="logo-accent">ENGINE</span>
           </span>
           <div className="text-center">
-            <h1 className="font-display text-xl font-semibold mb-1">Welcome back</h1>
-            <p className="text-dim text-[13.5px]">Sign in to get back to the board.</p>
+            <h1 className="font-display text-xl font-semibold mb-1">Create your account</h1>
+            <p className="text-dim text-[13.5px]">Join the board. Start climbing the ranks.</p>
           </div>
         </div>
 
         <form onSubmit={onSubmit} className="flex flex-col gap-3.5">
+          <Input
+            label="Username"
+            icon={User}
+            name="name"
+            placeholder="GrandmasterArjun"
+            value={form.name}
+            onChange={onChange}
+            autoComplete="username"
+          />
           <Input
             label="Email"
             icon={Mail}
@@ -82,30 +102,30 @@ export default function Login() {
             placeholder="••••••••"
             value={form.password}
             onChange={onChange}
-            autoComplete="current-password"
+            autoComplete="new-password"
+          />
+          <Input
+            label="Confirm Password"
+            icon={Lock}
+            type="password"
+            name="confirm"
+            placeholder="••••••••"
+            value={form.confirm}
+            onChange={onChange}
+            autoComplete="new-password"
           />
 
           {error && <p className="text-loss text-xs -mt-1">{error}</p>}
 
-          <div className="flex items-center justify-between text-xs text-dim -mt-0.5">
-            <label className="flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" className="accent-purple" />
-              Remember me
-            </label>
-            <Link to="/" className="text-purple hover:text-blue transition-colors">
-              Forgot password?
-            </Link>
-          </div>
-
           <Button type="submit" className="mt-1.5">
-            Sign In <ArrowRight size={16} />
+            Create Account <ArrowRight size={16} />
           </Button>
         </form>
 
         <p className="text-center text-[13px] text-dim mt-6">
-          New to ChessEngine?{" "}
-          <Link to="/signup" className="text-purple font-semibold hover:text-blue transition-colors">
-            Create an account
+          Already have an account?{" "}
+          <Link to="/login" className="text-purple font-semibold hover:text-blue transition-colors">
+            Sign in
           </Link>
         </p>
       </motion.div>

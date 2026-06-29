@@ -1,16 +1,48 @@
-# React + Vite
+# ChessEngine Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Tailwind CSS frontend for a chess app, built around the visual style of the
+provided Home page (deep navy glass UI, purple/blue gradients, Fraunces + Manrope + JetBrains Mono).
 
-Currently, two official plugins are available:
+## Pages
+- `/` — Home dashboard (matches the original design exactly)
+- `/login` — Login
+- `/signup` — Sign up
+- `/play` — Fully playable chess board (click a piece, see legal moves highlighted, click to move)
+- `/lobby` — Open game seats
+- `/tournaments` — Tournament listings
+- `/players` — Player directory
+- `/stats` — Personal stats & game history
+- `/settings` — Profile & preferences
+- `/support` — Help & contact
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Chess engine
+`src/lib/chessEngine.js` is a small, dependency-free move generator:
+- **Pawns**: single push, double push from the starting rank, diagonal captures,
+  and auto-promotion to a queen on reaching the last rank.
+- **Knights, bishops, rooks, queens, kings**: standard movement and capturing.
+- Turn alternates between white and black; captured pieces and a move list are
+  tracked in `src/pages/Play.jsx`.
+- Not implemented (kept out of scope intentionally): check/checkmate detection,
+  castling, en passant, and draw rules. The board still fully prevents moving
+  to illegal squares for every piece type.
 
-## React Compiler
+## Getting started
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Then open the printed local URL (default `http://localhost:5173`).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Build
+```bash
+npm run build
+npm run preview
+```
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Stack
+- React 18 + Vite
+- Tailwind CSS
+- react-router-dom (client-side routing)
+- framer-motion (page/element animation)
+- lucide-react (icons)

@@ -1,4 +1,4 @@
-import matchmakingHandler from "./matchmaking/matchmakingHandler.js";
+import matchMakingHandler from "./matchMakingHandler.js";
 // import gameSocketHandler from "./gameSocketHandler";
 
 const initializeSocket = (io) => {
@@ -7,9 +7,9 @@ const initializeSocket = (io) => {
 
         console.log("User Connected:", socket.id);
 
-        // Register socket handlers
-         matchmakingHandler(io, socket);
-        //  gameSocketHandler(io, socket);
+  
+         matchMakingHandler(io, socket);
+
 
         socket.on("disconnect", () => {
             console.log("User Disconnected:", socket.id);

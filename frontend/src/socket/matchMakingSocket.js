@@ -1,45 +1,38 @@
 import socket from "./socket";
-
-export const setupMatchmakingListeners = ({
-    onSearching,
-    onMatchFound,
-}) => {
-
-    socket.off("searching");
-    socket.off("match-found");
-
-    socket.on("searching", (data) => {
-        console.log("Searching:", data);
-
-        if (onSearching) {
-            onSearching(data);
-        }
-    });
-
-    socket.on("match-found", (data) => {
-        console.log("Match Found:", data);
-
-        if (onMatchFound) {
-            onMatchFound(data);
-        }
-    });
-};
+import { SOCKET_EVENTS } from "./events";
 
 export const findMatch = (userData) => {
-    if (!userData) {
-        return;
-    }
 
-    socket.emit("find-match", {
-        userId: userData.userId ?? userData._id,
-        rating: userData.rating ?? 1200,
-    });
+  socket.emit(
+    SOCKET_EVENTS.FIND_MATCH,
+    userData
+  );
 
 };
 
-export const removeMatchmakingListeners = () => {
+export const onSearching = (callback) => {
 
-    socket.off("searching");
-    socket.off("match-found");
+  socket.on(
+    SOCKET_EVENTS.SEARCHING,
+    callback
+  );
+
+};
+
+export const onMatchFound = (callback) => {
+
+  socket.on(
+    SOCKET_EVENTS.MATCH_FOUND,
+    callback
+  );
+
+};
+
+export const removeMatchFoundListener = (callback) => {
+
+  socket.off(
+    SOCKET_EVENTS.MATCH_FOUND,
+    callback
+  );
 
 };

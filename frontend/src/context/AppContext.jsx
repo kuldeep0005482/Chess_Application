@@ -1,9 +1,14 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import axiosInstance from "../api/axios";
 
 export const AppContext = createContext();
 
+
 export const AppContextProvider = ({ children }) => {
+
+
+
   axios.defaults.withCredentials = true;
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -11,18 +16,21 @@ export const AppContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [matchMaking, setMatchMaking] = useState(false);
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get(
-        `${backendUrl}/api/user/data`
-      );
+      const { data } = await axiosInstance.get("/api/user/data",);
+      console.log(data);
 
       if (data.success) {
         setUserData(data.data);
       }
     } catch (error) {
-      console.log("Get User Error:", error.response?.data);
+      console.log("Get User Error:", error);
+      console.log("Response:", error.response);
+      console.log("Data:", error.response?.data);
+      console.log("Status:", error.response?.status);
     }
   };
 
@@ -63,6 +71,9 @@ export const AppContextProvider = ({ children }) => {
 
     getUserData,
     getAuthState,
+
+    matchMaking,
+    setMatchMaking
   };
 
   return (
