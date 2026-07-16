@@ -1,90 +1,140 @@
-import { PIECE_GLYPH, FILES } from "../lib/chessEngine.js";
+import { FILES } from "../lib/chessEngine.js";
+import PIECES from "../lib/PIECES.js";
 
 export const squareName = (r, c) => `${FILES[c]}${8 - r}`;
 
 export default function InteractiveBoard({
   board,
+  playerColor = "white", // "white" | "black"
   selected,
   legalMoves,
   lastMove,
   onSquareClick,
 }) {
-  const isLegalTarget = (r, c) => legalMoves.some((m) => m.r === r && m.c === c);
+  const displayBoard =
+    playerColor === "white"
+      ? board
+      : [...board]
+        .reverse()
+        .map((row) => [...row].reverse());
+
+  const displayFiles =
+    playerColor === "white"
+      ? FILES
+      : [...FILES].reverse();
+
+  const isLegalTarget = (r, c) =>
+    legalMoves.some((m) => m.r === r && m.c === c);
 
   return (
-    <div className="relative flex justify-center py-1.5">
+    <div className="relative z-10 w-full h-full overflow-hidden shadow-2xl">
+      {/* Background Glow */}
       <div
-        className="absolute w-[460px] h-[460px] blur-[10px] z-0"
-        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.22), transparent 65%)" }}
+        className="absolute inset-0 z-0 blur-[18px]"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(116,115,136,0.22), transparent 70%)",
+        }}
       />
-      <div className="glass relative z-10 p-3.5 rounded-[22px]">
+
+      {/* Glass Container */}
+      <div className="glass relative z-10 h-full w-full overflow-hidden rounded-none">
         <div
-          className="grid rounded-[10px] overflow-hidden shadow-glow"
+          className="grid h-full w-full overflow-hidden"
           style={{
             gridTemplateColumns: "repeat(8, 1fr)",
             gridTemplateRows: "repeat(8, 1fr)",
-            width: "min(460px, 86vw)",
-            height: "min(460px, 86vw)",
           }}
         >
-          {board.map((row, r) =>
-            row.map((cell, c) => {
+          {displayBoard.map((row, displayR) =>
+            row.map((cell, displayC) => {
+              // Convert displayed coordinates -> actual board coordinates
+              const r =
+                playerColor === "white" ? displayR : 7 - displayR;
+
+              const c =
+                playerColor === "white" ? displayC : 7 - displayC;
+
               const dark = (r + c) % 2 === 1;
-              const isSelected = selected && selected.r === r && selected.c === c;
+
+              const isSelected =
+                selected &&
+                selected.r === r &&
+                selected.c === c;
+
               const isLegal = isLegalTarget(r, c);
+
               const isLastMove =
                 lastMove &&
-                ((lastMove.from.r === r && lastMove.from.c === c) ||
-                  (lastMove.to.r === r && lastMove.to.c === c));
+                ((lastMove.from.r === r &&
+                  lastMove.from.c === c) ||
+                  (lastMove.to.r === r &&
+                    lastMove.to.c === c));
+
               const pieceHere = cell !== " ";
 
               return (
                 <button
-                  key={`${r}-${c}`}
+                  key={`${displayR}-${displayC}`}
                   onClick={() => onSquareClick(r, c)}
-                  className={
-                    "relative flex items-center justify-center border-0 outline-none cursor-pointer transition-colors duration-150 " +
-                    (isSelected
-                      ? "!bg-[rgba(212,175,106,0.35)]"
+                  className={`relative flex items-center justify-center
+                    transition-all duration-150 border-0 outline-none
+
+                    ${isSelected
+                      ? "bg-[rgba(212,175,106,0.35)]"
                       : isLastMove
-                      ? "bg-[rgba(139,92,246,0.22)]"
-                      : dark
-                      ? "bg-[#101d38]"
-                      : "bg-[#1b2c50]")
-                  }
+                        ? "bg-[rgba(111,166,255,0.30)]"
+                        : dark
+                          ? "bg-[#747388]"
+                          : "bg-[#FAFAFB]"
+                    }
+                  `}
                 >
-                  {r === 7 && (
-                    <span className="absolute bottom-0.5 right-1 font-mono text-[9px] text-white/30">
-                      {FILES[c]}
-                    </span>
-                  )}
-                  {c === 0 && (
-                    <span className="absolute top-0.5 left-1 font-mono text-[9px] text-white/30">
-                      {8 - r}
+                  {/* File Letters */}
+                  {displayR === 7 && (
+                    <span className="absolute bottom-0.5 right-1 font-mono text-[9px] text-black/45">
+                      {displayFiles[displayC]}
                     </span>
                   )}
 
+                  {/* Rank Numbers */}
+                  {displayC === 0 && (
+                    <span className="absolute top-0.5 left-1 font-mono text-[9px] text-black/45">
+                      {playerColor === "white"
+                        ? 8 - displayR
+                        : displayR + 1}
+                    </span>
+                  )}
+
+                  {/* Legal Move */}
                   {isLegal && !pieceHere && (
-                    <span className="w-[26%] h-[26%] rounded-full bg-[rgba(139,92,246,0.55)]" />
-                  )}
-                  {isLegal && pieceHere && (
-                    <span className="absolute inset-[6%] rounded-[6px] ring-[3px] ring-[rgba(248,113,113,0.75)]" />
+                    <span className="w-[24%] h-[24%] rounded-full bg-[rgba(111,166,255,0.65)]" />
                   )}
 
+                  {/* Capture Highlight */}
+                  {isLegal && pieceHere && (
+                    <span className="absolute inset-[6%] rounded-lg ring-[3px] ring-[rgba(255,106,106,0.8)]" />
+                  )}
+
+                  {/* Chess Piece */}
                   {pieceHere && (
-                    <span
-                      className="select-none leading-none relative z-10"
-                      style={{
-                        fontSize: "clamp(20px, 4.6vw, 32px)",
-                        color: cell === cell.toUpperCase() ? "#f3f1ff" : "#0a1024",
-                        filter:
-                          cell === cell.toUpperCase()
-                            ? "drop-shadow(0 1px 2px rgba(0,0,0,0.4))"
-                            : "drop-shadow(0 1px 1px rgba(255,255,255,0.25))",
-                      }}
-                    >
-                      {PIECE_GLYPH[cell]}
-                    </span>
+                    <img
+                      src={PIECES[cell].image}
+                      alt={PIECES[cell].name}
+                      draggable={false}
+                      className="
+                        relative
+                        z-10
+                        w-[78%]
+                        h-[78%]
+                        object-contain
+                        select-none
+                        pointer-events-none
+                        transition-transform
+                        duration-150
+                        hover:scale-105
+                      "
+                    />
                   )}
                 </button>
               );

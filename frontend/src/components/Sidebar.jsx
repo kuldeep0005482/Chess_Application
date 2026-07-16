@@ -16,7 +16,7 @@ import {
 import Avatar from "./Avatar.jsx";
 
 const NAV_ITEMS = [
-  { label: "Play", to: "/play", icon: Swords },
+  { label: "Play", to: "/", icon: Swords },
   { label: "Lobby", to: "/lobby", icon: Gauge },
   { label: "Tournaments", to: "/tournaments", icon: Trophy },
   { label: "Players", to: "/players", icon: UserPlus },
@@ -75,7 +75,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
           </div>
         </NavLink>
 
-        <nav className="flex flex-col gap-[3px]">
+        <nav className="flex flex-col justify-between gap-[3px]">
           {NAV_ITEMS.map(({ label, to, icon: Icon }) => (
             <NavLink key={label} to={to} className={({ isActive }) => navItemClass(isActive)}>
               {({ isActive }) => (
@@ -91,10 +91,10 @@ export default function Sidebar({ mobileOpen, onClose }) {
           ))}
         </nav>
 
-        <NavLink to="/play" className="btn-primary mt-auto flex items-center justify-center gap-2 p-3 text-[13.5px]">
+        {/* <NavLink to="/play" className="btn-primary mt-auto flex items-center justify-center gap-2 p-3 text-[13.5px]">
           <Play size={16} fill="currentColor" />
           Play Now
-        </NavLink>
+        </NavLink> */}
 
         <div className="flex flex-col gap-0.5">
           <NavLink to="/settings" className={({ isActive }) => navItemClass(isActive) + " text-[12.5px]"}>

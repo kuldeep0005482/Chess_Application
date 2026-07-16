@@ -21,7 +21,6 @@ export const AppContextProvider = ({ children }) => {
   const getUserData = async () => {
     try {
       const { data } = await axiosInstance.get("/api/user/data",);
-      console.log(data);
 
       if (data.success) {
         setUserData(data.data);

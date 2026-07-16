@@ -8,9 +8,9 @@ export default function Layout({ children }) {
   return (
     <div className="min-h-screen w-full font-body text-ink">
       <MobileTopbar onOpen={() => setMobileOpen(true)} />
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen min-w-0">
         <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
-        <main className="flex-1 lg:ml-[296px] px-3.5 pt-[76px] pb-8 lg:pt-4 lg:px-4">
+        <main className="flex-1 min-w-0 lg:ml-[296px] px-3.5 pt-[76px] pb-8 lg:pt-4 lg:px-4">
           {children}
         </main>
       </div>

@@ -36,3 +36,14 @@ export const removeMatchFoundListener = (callback) => {
   );
 
 };
+
+export const roomJoin = (callback)=>{
+  socket.on(
+    SOCKET_EVENTS.JOIN_ROOM,
+    callback
+  )
+}
+
+export const gameStart = (callback) => {
+  socket.on(SOCKET_EVENTS.GAME_START, callback);
+};

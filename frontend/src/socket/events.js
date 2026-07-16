@@ -8,4 +8,9 @@ export const SOCKET_EVENTS = {
 
   RESIGN: "resign",
   GAME_OVER: "game-over",
+
+  JOIN_ROOM: "join-room",
+  ROOM_JOINED: "room-joined",
+  PLAYER_JOINED:"player_joined",
+  GAME_START:"game-start",
 };

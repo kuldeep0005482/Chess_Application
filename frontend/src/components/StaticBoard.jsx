@@ -14,19 +14,17 @@ const BOARD = [
 
 export default function StaticBoard() {
   return (
-    <div className="relative flex justify-center py-1.5">
+    <div className="relative flex w-full justify-center py-1.5">
       <div
-        className="absolute w-[460px] h-[460px] blur-[10px] z-0"
+        className="absolute inset-0 z-0 blur-[10px]"
         style={{ background: "radial-gradient(circle, rgba(139,92,246,0.22), transparent 65%)" }}
       />
-      <div className="glass relative z-10 p-3.5 rounded-[22px]">
+      <div className="glass relative z-10 w-full p-3.5 rounded-[22px]">
         <div
-          className="grid rounded-[10px] overflow-hidden shadow-glow"
+          className="grid w-full aspect-square rounded-[10px] overflow-hidden shadow-glow"
           style={{
             gridTemplateColumns: "repeat(8, 1fr)",
             gridTemplateRows: "repeat(8, 1fr)",
-            width: "min(440px, 80vw)",
-            height: "min(440px, 80vw)",
           }}
         >
           {BOARD.map((row, r) =>

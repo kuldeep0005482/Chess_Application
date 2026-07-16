@@ -1,9 +1,10 @@
-import { useState, useContext } from "react";
+import { useContext, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { RotateCcw, Circle } from "lucide-react";
 import Layout from "../components/Layout.jsx";
 import PlayerStrip from "../components/PlayerStrip.jsx";
 import InteractiveBoard, { squareName } from "../components/InteractiveBoard.jsx";
+import useResponsiveBoardSize from "../hooks/useResponsiveBoardSize.js";
 import {
   createInitialBoard,
   getLegalMoves,
@@ -16,7 +17,15 @@ import { AppContext } from "../context/AppContext.jsx";
 const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } };
 
 export default function Play() {
-  const {userData} = useContext(AppContext);
+  const { userData } = useContext(AppContext);
+  const centerRef = useRef(null);
+  const topStripRef = useRef(null);
+  const bottomStripRef = useRef(null);
+  const boardSize = useResponsiveBoardSize({
+    centerRef,
+    topStripRef,
+    bottomStripRef,
+  });
   const [board, setBoard] = useState(createInitialBoard());
   const [turn, setTurn] = useState("w");
   const [selected, setSelected] = useState(null);
@@ -90,34 +99,52 @@ export default function Play() {
 
   return (
     <Layout>
-      <div className="flex flex-col lg:flex-row gap-5 items-start">
-        <motion.div className="flex-1 min-w-0 flex flex-col gap-[18px]" initial="hidden" animate="show" variants={fadeUp}>
-          {/* <div className="px-1">
-            <span className="font-mono text-[11.5px] text-purple uppercase tracking-[0.12em] flex items-center gap-2 before:content-[''] before:w-[22px] before:h-px before:bg-gradient-to-r before:from-purple before:to-transparent">
-              Local Match &middot; No clock
-            </span>
-            <h1 className="font-display font-semibold leading-[1.08] mt-2 mb-1 text-[clamp(26px,3vw,36px)]">
-              Play <span className="hero-title-accent">Chess</span>
-            </h1>
-            <p className="text-dim text-[14.5px]">
-              Click a piece to see its legal moves, then click a highlighted square to move.
-            </p>
-          </div> */}
+      <div className="grid grid-cols-1 gap-6 items-start xl:grid-cols-[minmax(0,1fr)_340px]">
+        <motion.div
+          className="flex min-w-0 justify-center"
+          initial="hidden"
+          animate="show"
+          variants={fadeUp}
+        >
+          <div className="flex w-full min-w-0 justify-center">
+            <div ref={centerRef} className="flex w-full min-w-0 flex-col items-center gap-1">
+              <div ref={topStripRef} className="w-full">
+                <PlayerStrip
+                  name="VolkovK_92"
+                  elo={2148}
+                  color="black"
+                  clock="--:--"
+                  top
+                />
+              </div>
 
-          <div className="flex flex-col gap-2.5 items-center">
-            <PlayerStrip name="VolkovK_92" elo={2148} color="black" clock="--:--" top />
-            <InteractiveBoard
-              board={board}
-              selected={selected}
-              legalMoves={legalMoves}
-              lastMove={lastMove}
-              onSquareClick={onSquareClick}
-            />
-            <PlayerStrip name = {userData.name} elo={userData.rating} color="white" clock="--:--" />
+              <div
+                className="overflow-hidden "
+                style={{ width: boardSize, height: boardSize }}
+              >
+                <InteractiveBoard
+                  board={board}
+                  selected={selected}
+                  playerColor="black"
+                  legalMoves={legalMoves}
+                  lastMove={lastMove}
+                  onSquareClick={onSquareClick}
+                />
+              </div>
+
+              <div ref={bottomStripRef} className="w-full">
+                <PlayerStrip
+                  name={userData.name}
+                  elo={userData.rating}
+                  color="white"
+                  clock="--:--"
+                />
+              </div>
+            </div>
           </div>
         </motion.div>
 
-        <motion.div className="w-full lg:w-[340px] flex-shrink-0 flex flex-col gap-4" initial="hidden" animate="show" variants={fadeUp}>
+        <motion.div className="w-full mt-4 lg:mt-0 xl:w-[340px] shrink-0 flex flex-col gap-4" initial="hidden" animate="show" variants={fadeUp}>
           <div className="glass p-[18px]">
             <div className="flex items-center justify-between mb-3.5">
               <h3 className="font-display text-[15px] font-semibold">Turn</h3>

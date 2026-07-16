@@ -5,7 +5,7 @@ export default function PlayerStrip({ name, elo, color, clock, top }) {
   return (
     <div
       className={
-        "glass-inset flex items-center gap-[11px] px-3.5 py-2.5 max-w-[440px] w-full mx-auto" +
+        "glass-inset flex items-center gap-[11px] px-3.5 py-1.5 w-full max-w-none mx-auto" +
         (top ? " mb-0.5" : "")
       }
     >

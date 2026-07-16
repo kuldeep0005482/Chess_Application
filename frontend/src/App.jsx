@@ -11,6 +11,8 @@ import Settings from "./pages/Settings.jsx";
 import Support from "./pages/Support.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProtectedRoute from "./context/protectedRoute.jsx";
+import Online from "./pages/Online.jsx";
+import { BrowserRouter } from "react-router-dom";
 
 
 export default function App() {
@@ -26,6 +28,8 @@ export default function App() {
       <Route path="/stats" element={<ProtectedRoute><Stats/></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><Settings/></ProtectedRoute>} />
       <Route path="/support" element={<ProtectedRoute><Support/></ProtectedRoute>} />
+      <Route path="/play/online" element={<ProtectedRoute><Online/></ProtectedRoute>} />
+    
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
