@@ -1,5 +1,6 @@
 import {rooms, playerRooms} from "./redis.js";
 import { SOCKET_EVENTS } from "./events.js";
+import { Chess } from "chess.js";
 
 
 const createRoom = (io, player1, player2)=>{
@@ -16,6 +17,7 @@ const createRoom = (io, player1, player2)=>{
     const room = {
 
         roomId,
+        chessBoard: new Chess(),
 
         white: {
             userId: white.userId,
