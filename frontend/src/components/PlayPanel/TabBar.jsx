@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Crown, LayoutGrid, Users } from "lucide-react";
-
+// this is tabs object 
 const tabs = [
   {
     id: "new-game",
